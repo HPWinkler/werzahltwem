@@ -36,10 +36,10 @@
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="'/group/' + group.title + '/teilnehmer'">{{ group.title }}</a></td>
                                 <td>
-                                    <button @click="initShowGroup(index)" class="btn btn-primary btn-xs">Teilnehmerliste</button>
-                                    <button @click="initUpdateTeilnehmer(index)" class="btn btn-success btn-xs">Neuer Teilnehmer</button>
-                                    <button @click="showPayGroup(index)" class="btn btn-info btn-xs">Ausgabenliste</button>
-                                    <button @click="showAbrechnung(index)" class="btn btn-warning btn-xs">Endabrechnung</button>
+                                    <button @click="initMemberView(index)" class="btn btn-primary btn-xs">Teilnehmerliste</button>
+                                    <button @click="initNewMember(index)" class="btn btn-success btn-xs">Neuer Teilnehmer</button>
+                                    <button @click="showExpenditures(index)" class="btn btn-info btn-xs">Ausgabenliste</button>
+                                    <button @click="showWzw(index)" class="btn btn-warning btn-xs">Endabrechnung</button>
                                     <button @click="deleteGroup(index)" class="btn btn-danger btn-xs">Gruppe schließen</button>
                                 </td>
                                 <td>{{ group.created_at }}</td>
@@ -52,6 +52,7 @@
         </div>
 
 
+        <!-- Add new group -->
         <div class="modal fade" tabindex="-1" role="dialog" id="add_group_model">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -84,7 +85,8 @@
         </div><!-- /.modal -->
 
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="update_teilnehmer_model">
+        <!-- Add new member -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="new_member_modal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -101,7 +103,7 @@
 
                         <div class="form-group">
                             <input type="text" placeholder="Name des Teilnehmers" class="form-control"
-                                   v-model="update_group.newTeilnehmer">
+                                   v-model="update_group.newMember">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -113,7 +115,8 @@
         </div><!-- /.modal -->
 
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="show_group_model">
+        <!-- Memberview -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="member_view">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -141,7 +144,8 @@
         </div><!-- /.modal -->
 
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="show_ausgaben_model">
+        <!-- Expenditures -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="show_expenditures">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,7 +170,8 @@
         </div><!-- /.modal -->
 
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="show_abrechnung_model">
+        <!-- Show Wzw -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="show_wzw">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -177,7 +182,7 @@
 
                     <div class="modal-body">
                         <ul>
-                            <li v-for="skill in abrechnung_group">
+                            <li v-for="skill in wzw_group">
                                 {{ skill }}
                             </li>
                         </ul>
@@ -201,8 +206,8 @@
                     title: '',
                     members: {},
                     expenditures: {},
+                    newMember:'',
                     wer: '',
-                    newTeilnehmer:'',
                     was: '',
                     preis: ''
                 },
@@ -210,7 +215,7 @@
                 groups: [],
                 update_group: {},
                 show_group: [],
-                abrechnung_group: []
+                wzw_group: []
             }
         },
         mounted()
@@ -225,34 +230,34 @@
                         this.groups = response.data.groups;
                     });
             },
-            initShowGroup(index)
+            initMemberView(index)
             {
-                $("#show_group_model").modal("show");
-                this.test = this.groups[index];
+                $("#member_view").modal("show");
+                this.mv = this.groups[index];
 
-                axios.get('/group/' + this.test.title)
+                axios.get('/group/' + this.mv.title)
                     .then(response => {
                         this.show_group = response.data.group;
                     });
             },
-            showPayGroup(index)
+            showExpenditures(index)
             {
-                $("#show_ausgaben_model").modal("show");
-                this.test = this.groups[index];
+                $("#show_expenditures").modal("show");
+                this.se = this.groups[index];
 
-                axios.get('/group/' + this.test.title)
+                axios.get('/group/' + this.se.title)
                     .then(response => {
                         this.show_group = response.data.group;
                     });
             },
-            showAbrechnung(index)
+            showWzw(index)
             {
-                $("#show_abrechnung_model").modal("show");
-                this.test = this.groups[index];
+                $("#show_wzw").modal("show");
+                this.swzw = this.groups[index];
 
-                axios.get('/group/' + this.test.title + '/berechnen')
+                axios.get('/group/' + this.swzw.title + '/berechnen')
                     .then(response => {
-                        this.abrechnung_group = response.data.wzw;
+                        this.wzw_group = response.data.wzw;
                     });
             },
             initAddGroup()
@@ -265,13 +270,9 @@
                     title: this.group.title,
                 })
                     .then(response => {
-
                         this.reset();
-
                         this.groups.push(response.data.group);
-
                         $("#add_group_model").modal("hide");
-
                     })
                     .catch(error => {
                         this.errors = [];
@@ -285,20 +286,20 @@
             {
                 this.group.title = '';
             },
-            initUpdateTeilnehmer(index)
+            initNewMember(index)
             {
                 this.errors = [];
-                $("#update_teilnehmer_model").modal("show");
+                $("#new_member_modal").modal("show");
                 this.update_group = this.groups[index];
             },
             updateGroup()
             {
                 axios.patch('/group/' + this.update_group.title, {
                     title: this.update_group.title,
-                    members: this.update_group.newTeilnehmer
+                    members: this.update_group.newMember
                 })
                     .then(response => {
-                        this.update_group.newTeilnehmer = '';
+                        this.update_group.newMember = '';
                         console.log(response.data);
                     })
                     .catch(error => {
@@ -311,17 +312,14 @@
             },
             deleteGroup(index)
             {
-                let conf = confirm("Möchte sie diese Gruppe wirklich schließen?");
-                if (conf === true) {
+                let confbox = confirm("Möchte sie diese Gruppe wirklich schließen?");
+                if (confbox === true) {
 
                     axios.delete('/group/' + this.groups[index].title)
                         .then(response => {
-
                             this.groups.splice(index, 1);
-
                         })
                         .catch(error => {
-
                         });
                 }
             }

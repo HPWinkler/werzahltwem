@@ -43426,6 +43426,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -43434,8 +43439,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 title: '',
                 members: {},
                 expenditures: {},
+                newMember: '',
                 wer: '',
-                newTeilnehmer: '',
                 was: '',
                 preis: ''
             },
@@ -43443,7 +43448,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             groups: [],
             update_group: {},
             show_group: [],
-            abrechnung_group: []
+            wzw_group: []
         };
     },
     mounted: function mounted() {
@@ -43458,34 +43463,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.groups = response.data.groups;
             });
         },
-        initShowGroup: function initShowGroup(index) {
+        initMemberView: function initMemberView(index) {
             var _this2 = this;
 
-            $("#show_group_model").modal("show");
-            this.test = this.groups[index];
+            $("#member_view").modal("show");
+            this.mv = this.groups[index];
 
-            axios.get('/group/' + this.test.title).then(function (response) {
+            axios.get('/group/' + this.mv.title).then(function (response) {
                 _this2.show_group = response.data.group;
             });
         },
-        showPayGroup: function showPayGroup(index) {
+        showExpenditures: function showExpenditures(index) {
             var _this3 = this;
 
-            $("#show_ausgaben_model").modal("show");
-            this.test = this.groups[index];
+            $("#show_expenditures").modal("show");
+            this.se = this.groups[index];
 
-            axios.get('/group/' + this.test.title).then(function (response) {
+            axios.get('/group/' + this.se.title).then(function (response) {
                 _this3.show_group = response.data.group;
             });
         },
-        showAbrechnung: function showAbrechnung(index) {
+        showWzw: function showWzw(index) {
             var _this4 = this;
 
-            $("#show_abrechnung_model").modal("show");
-            this.test = this.groups[index];
+            $("#show_wzw").modal("show");
+            this.swzw = this.groups[index];
 
-            axios.get('/group/' + this.test.title + '/berechnen').then(function (response) {
-                _this4.abrechnung_group = response.data.wzw;
+            axios.get('/group/' + this.swzw.title + '/berechnen').then(function (response) {
+                _this4.wzw_group = response.data.wzw;
             });
         },
         initAddGroup: function initAddGroup() {
@@ -43497,11 +43502,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/group', {
                 title: this.group.title
             }).then(function (response) {
-
                 _this5.reset();
-
                 _this5.groups.push(response.data.group);
-
                 $("#add_group_model").modal("hide");
             }).catch(function (error) {
                 _this5.errors = [];
@@ -43514,9 +43516,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         reset: function reset() {
             this.group.title = '';
         },
-        initUpdateTeilnehmer: function initUpdateTeilnehmer(index) {
+        initNewMember: function initNewMember(index) {
             this.errors = [];
-            $("#update_teilnehmer_model").modal("show");
+            $("#new_member_modal").modal("show");
             this.update_group = this.groups[index];
         },
         updateGroup: function updateGroup() {
@@ -43524,9 +43526,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.patch('/group/' + this.update_group.title, {
                 title: this.update_group.title,
-                members: this.update_group.newTeilnehmer
+                members: this.update_group.newMember
             }).then(function (response) {
-                _this6.update_group.newTeilnehmer = '';
+                _this6.update_group.newMember = '';
                 console.log(response.data);
             }).catch(function (error) {
                 _this6.errors = [];
@@ -43539,11 +43541,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteGroup: function deleteGroup(index) {
             var _this7 = this;
 
-            var conf = confirm("Möchte sie diese Gruppe wirklich schließen?");
-            if (conf === true) {
+            var confbox = confirm("Möchte sie diese Gruppe wirklich schließen?");
+            if (confbox === true) {
 
                 axios.delete('/group/' + this.groups[index].title).then(function (response) {
-
                     _this7.groups.splice(index, 1);
                 }).catch(function (error) {});
             }
@@ -43639,7 +43640,7 @@ var render = function() {
                                   staticClass: "btn btn-primary btn-xs",
                                   on: {
                                     click: function($event) {
-                                      _vm.initShowGroup(index)
+                                      _vm.initMemberView(index)
                                     }
                                   }
                                 },
@@ -43652,7 +43653,7 @@ var render = function() {
                                   staticClass: "btn btn-success btn-xs",
                                   on: {
                                     click: function($event) {
-                                      _vm.initUpdateTeilnehmer(index)
+                                      _vm.initNewMember(index)
                                     }
                                   }
                                 },
@@ -43665,7 +43666,7 @@ var render = function() {
                                   staticClass: "btn btn-info btn-xs",
                                   on: {
                                     click: function($event) {
-                                      _vm.showPayGroup(index)
+                                      _vm.showExpenditures(index)
                                     }
                                   }
                                 },
@@ -43678,7 +43679,7 @@ var render = function() {
                                   staticClass: "btn btn-warning btn-xs",
                                   on: {
                                     click: function($event) {
-                                      _vm.showAbrechnung(index)
+                                      _vm.showWzw(index)
                                     }
                                   }
                                 },
@@ -43803,7 +43804,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal fade",
-        attrs: { tabindex: "-1", role: "dialog", id: "update_teilnehmer_model" }
+        attrs: { tabindex: "-1", role: "dialog", id: "new_member_modal" }
       },
       [
         _c(
@@ -43831,8 +43832,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.update_group.newTeilnehmer,
-                        expression: "update_group.newTeilnehmer"
+                        value: _vm.update_group.newMember,
+                        expression: "update_group.newMember"
                       }
                     ],
                     staticClass: "form-control",
@@ -43840,7 +43841,7 @@ var render = function() {
                       type: "text",
                       placeholder: "Name des Teilnehmers"
                     },
-                    domProps: { value: _vm.update_group.newTeilnehmer },
+                    domProps: { value: _vm.update_group.newMember },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
@@ -43848,7 +43849,7 @@ var render = function() {
                         }
                         _vm.$set(
                           _vm.update_group,
-                          "newTeilnehmer",
+                          "newMember",
                           $event.target.value
                         )
                       }
@@ -43887,7 +43888,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal fade",
-        attrs: { tabindex: "-1", role: "dialog", id: "show_group_model" }
+        attrs: { tabindex: "-1", role: "dialog", id: "member_view" }
       },
       [
         _c(
@@ -43944,7 +43945,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal fade",
-        attrs: { tabindex: "-1", role: "dialog", id: "show_ausgaben_model" }
+        attrs: { tabindex: "-1", role: "dialog", id: "show_expenditures" }
       },
       [
         _c(
@@ -43984,7 +43985,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal fade",
-        attrs: { tabindex: "-1", role: "dialog", id: "show_abrechnung_model" }
+        attrs: { tabindex: "-1", role: "dialog", id: "show_wzw" }
       },
       [
         _c(
@@ -43997,7 +43998,7 @@ var render = function() {
               _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "ul",
-                  _vm._l(_vm.abrechnung_group, function(skill) {
+                  _vm._l(_vm.wzw_group, function(skill) {
                     return _c("li", [
                       _vm._v(
                         "\n                            " +

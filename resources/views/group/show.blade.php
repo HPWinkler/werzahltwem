@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Teilnehmer ({{ count($teilnehmer) }})
+                    Teilnehmer ({{ count($allMembers) }})
                 </div>
 
                 <div class="panel-body">
@@ -32,10 +32,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($teilnehmer as $tn)
+                        @foreach($allMembers as $member)
                             <tr>
-                                <td>{{ $tn['tn_name'] }}</td>
-                                <td>{{ $tn['mussZahlen'] }} €</td>
+                                <td>{{ $member['tn_name'] }}</td>
+                                <td>{{ $member['mussZahlen'] }} €</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -83,14 +83,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($zuzahlen as $zn)
+                        @foreach($paid as $pay)
                             <tr>
-                                <td>{{ $zn['wer'] }}</td>
+                                <td>{{ $pay['wer'] }}</td>
                                 <td>
-                                    <?php  $beteiligte = implode(", ", $zn['beteiligte']); ?> {{ $beteiligte }}
+                                    <?php  $involved = implode(", ", $pay['beteiligte']); ?> {{ $involved }}
                                 </td>
-                                <td>{{ $zn['was'] }}</td>
-                                <td>{{ $zn['preis'] }} €</td>
+                                <td>{{ $pay['was'] }}</td>
+                                <td>{{ $pay['preis'] }} €</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -102,9 +102,5 @@
             </div>
         </div>
     </div>
-
-
-
-
 
 @endsection

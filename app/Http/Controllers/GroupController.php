@@ -64,60 +64,6 @@ class GroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Group  $group
-     * @return \Illuminate\Http\Response
-     */
-    public function showTeilnehmer(Group $group)
-    {
-        $tv = json_decode($group->members, true);
-        $teilnehmer = json_decode($group->members, true);
-        $zuzahlen = json_decode($group->expenditures, true);
-
-
-        for ($i = 0; $i < 40; $i++)
-        {
-            foreach ($tv as $key => $row) {
-                $mussZahlen[$key] = $row['mussZahlen'];
-            }
-
-            $mussZahlen = array_column($tv, 'mussZahlen');
-            array_multisort($mussZahlen, SORT_DESC, $tv);
-
-            $firstElement  = reset($tv);
-            $lastElement = end($tv);
-
-            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
-
-            if ($division > 0)
-            {
-                array_pop($tv);
-                $tv[0]['mussZahlen'] = $division;
-                $betrag = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $betrag € an {$firstElement['tn_name']}";
-            }
-            else
-            {
-                $tv[count($tv)-1]['mussZahlen'] = $division;
-                unset($tv[0]);
-                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
-            }
-
-            if (count($tv) == 1)
-                break;
-        }
-
-
-        return view('group.show', compact(
-            'group',
-            'zuzahlen',
-            'teilnehmer',
-            'wzw'
-        ));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -158,11 +104,11 @@ class GroupController extends Controller
             array_push($zv, $append);
 
             foreach ($tv as $key => $entry) {
-                $durchschnitt = ($request->input('preis') / count($tv)) * - 1;
+                $average = ($request->input('preis') / count($tv)) * - 1;
                 if($tv[$key]['tn_name'] == $request->input('expenditures'))
-                    $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $durchschnitt;
+                    $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $average;
                 else
-                    $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $durchschnitt;
+                    $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $average;
             }
         }
 
@@ -176,6 +122,49 @@ class GroupController extends Controller
             'message' => 'Task updated successfully!'
         ], 200);
     }
+
+
+    public function berechnen(Group $group)
+    {
+        $tv = json_decode($group->members, true);
+
+        for ($i = 0; $i < 40; $i++)
+        {
+            foreach ($tv as $key => $row) {
+                $mussZahlen[$key] = $row['mussZahlen'];
+            }
+
+            $mussZahlen = array_column($tv, 'mussZahlen');
+            array_multisort($mussZahlen, SORT_DESC, $tv);
+
+            $firstElement  = reset($tv);
+            $lastElement = end($tv);
+
+            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
+
+            if ($division > 0)
+            {
+                array_pop($tv);
+                $tv[0]['mussZahlen'] = $division;
+                $amount = $lastElement['mussZahlen'] * -1;
+                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
+            }
+            else
+            {
+                $tv[count($tv)-1]['mussZahlen'] = $division;
+                unset($tv[0]);
+                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
+            }
+
+            if (count($tv) == 1)
+                break;
+        }
+
+        return response()->json([
+            'wzw'    => $wzw,
+        ], 200);
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -193,11 +182,68 @@ class GroupController extends Controller
     }
 
 
+
+
     public function addTeilnehmer(Group $group)
     {
-        $teilnehmer = json_decode($group->members, true);
+        $allMembers = json_decode($group->members, true);
 
-        return view('group.addTn', compact('group', 'teilnehmer'));
+        return view('group.addTn', compact('group', 'allMembers'));
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Group  $group
+     * @return \Illuminate\Http\Response
+     */
+    public function showTeilnehmer(Group $group)
+    {
+        $tv = json_decode($group->members, true);
+        $allMembers = json_decode($group->members, true);
+        $paid = json_decode($group->expenditures, true);
+
+
+        for ($i = 0; $i < 40; $i++)
+        {
+            foreach ($tv as $key => $row) {
+                $mussZahlen[$key] = $row['mussZahlen'];
+            }
+
+            $mussZahlen = array_column($tv, 'mussZahlen');
+            array_multisort($mussZahlen, SORT_DESC, $tv);
+
+            $firstElement  = reset($tv);
+            $lastElement = end($tv);
+
+            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
+
+            if ($division > 0)
+            {
+                array_pop($tv);
+                $tv[0]['mussZahlen'] = $division;
+                $amount = $lastElement['mussZahlen'] * -1;
+                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
+            }
+            else
+            {
+                $tv[count($tv)-1]['mussZahlen'] = $division;
+                unset($tv[0]);
+                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
+            }
+
+            if (count($tv) == 1)
+                break;
+        }
+
+
+        return view('group.show', compact(
+            'group',
+            'paid',
+            'allMembers',
+            'wzw'
+        ));
     }
 
 
@@ -234,9 +280,9 @@ class GroupController extends Controller
 
     public function addZahlung(Group $group)
     {
-        $teilnehmer = json_decode($group->members, true);
+        $allMembers = json_decode($group->members, true);
 
-        return view('group.add', compact('group', 'teilnehmer'));
+        return view('group.add', compact('group', 'allMembers'));
     }
 
 
@@ -261,29 +307,27 @@ class GroupController extends Controller
         );
         array_push($zv, $append);
 
-        $beteiligte = $request->input('beteiligte');
+        $involved = $request->input('beteiligte');
 
         foreach ($tv as $key => $entry) {
-            $durchschnitt = ($request->input('preis') / count($beteiligte)) * - 1;
-            $runden = round($durchschnitt, 2);
+            $average = ($request->input('preis') / count($involved)) * - 1;
+            $roundup = round($average, 2);
             $stoploop = 0;
 
-            foreach ($beteiligte as $beteiligt)
+            foreach ($involved as $inv)
             {
-                if ($beteiligt == $request->input('wer'))
+                if ($inv == $request->input('wer'))
                 {
                     if($tv[$key]['tn_name'] == $request->input('wer'))
                     {
-                        $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $runden;
+                        $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $roundup;
                     }
                 }
                 else
                 {
-                    if($tv[$key]['tn_name'] !== $request->input('wer')
-                        && $tv[$key]['tn_name'] == $beteiligt
-                        && $stoploop < 1)
+                    if($tv[$key]['tn_name'] !== $request->input('wer') && $tv[$key]['tn_name'] == $inv && $stoploop < 1)
                     {
-                        $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $runden;
+                        $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $roundup;
                         $stoploop++;
                     }
                 }
@@ -297,48 +341,6 @@ class GroupController extends Controller
         $group->save();
 
         return redirect()->action('GroupController@showTeilnehmer', [$group]);
-    }
-
-
-    public function berechnen(Group $group)
-    {
-        $tv = json_decode($group->members, true);
-
-        for ($i = 0; $i < 40; $i++)
-        {
-            foreach ($tv as $key => $row) {
-                $mussZahlen[$key] = $row['mussZahlen'];
-            }
-
-            $mussZahlen = array_column($tv, 'mussZahlen');
-            array_multisort($mussZahlen, SORT_DESC, $tv);
-
-            $firstElement  = reset($tv);
-            $lastElement = end($tv);
-
-            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
-
-            if ($division > 0)
-            {
-                array_pop($tv);
-                $tv[0]['mussZahlen'] = $division;
-                $betrag = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $betrag € an {$firstElement['tn_name']}";
-            }
-            else
-            {
-                $tv[count($tv)-1]['mussZahlen'] = $division;
-                unset($tv[0]);
-                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
-            }
-
-            if (count($tv) == 1)
-                break;
-        }
-
-        return response()->json([
-            'wzw'    => $wzw,
-        ], 200);
     }
 
 
@@ -364,8 +366,8 @@ class GroupController extends Controller
             {
                 array_pop($tv);
                 $tv[0]['mussZahlen'] = $division;
-                $betrag = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $betrag € an {$firstElement['tn_name']}";
+                $amount = $lastElement['mussZahlen'] * -1;
+                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
             }
             else
             {

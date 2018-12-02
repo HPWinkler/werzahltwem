@@ -29,9 +29,9 @@
                 <div class="form-group">
                     {{ Form::label('wer', 'Name') }}
                     <select name="wer" class="form-control">
-                        @foreach($teilnehmer as $tn)
-                            <option value="{{ $tn['tn_name'] }}" >
-                                {{ $tn['tn_name'] }}
+                        @foreach($allMembers as $member)
+                            <option value="{{ $member['tn_name'] }}" >
+                                {{ $member['tn_name'] }}
                             </option>
                         @endforeach
                     </select>
@@ -40,9 +40,9 @@
                 <div class="form-group">
                     {{ Form::label('beteiligte', 'Beteiligte') }} (halte Strg gedrückt  um mehrere Teilnehmer auszuwählen)
                     <select name="beteiligte[]" class="form-control" multiple>
-                        @foreach($teilnehmer as $tn)
-                            <option value="{{ $tn['tn_name'] }}" >
-                                {{ $tn['tn_name'] }}
+                        @foreach($allMembers as $member)
+                            <option value="{{ $member['tn_name'] }}" >
+                                {{ $member['tn_name'] }}
                             </option>
                         @endforeach
                     </select>
