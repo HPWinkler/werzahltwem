@@ -124,10 +124,10 @@
 
                     <div class="modal-body">
                         <ul>
-                            <li v-for="data in show_group.teilnehmerview" v-if="data.mussZahlen >= 0">
+                            <li v-for="data in show_group.members" v-if="data.mussZahlen >= 0">
                                 {{ data.tn_name }} bekommt {{ data.mussZahlen }} €
                             </li>
-                            <li v-for="data in show_group.teilnehmerview" v-if="data.mussZahlen < 0">
+                            <li v-for="data in show_group.members" v-if="data.mussZahlen < 0">
                                 {{ data.tn_name }} muss {{ data.mussZahlen }} € zahlen
                             </li>
                         </ul>
@@ -152,7 +152,7 @@
 
                     <div class="modal-body">
                         <ul>
-                            <li v-for="skill in show_group.ausgabenview">
+                            <li v-for="skill in show_group.expenditures">
                                  {{ skill.wer }} zahlt {{ skill.preis }} € für {{ skill.was }}
                             </li>
                         </ul>
@@ -199,8 +199,8 @@
             return {
                 group: {
                     title: '',
-                    teilnehmerview: {},
-                    ausgabenview: {},
+                    members: {},
+                    expenditures: {},
                     wer: '',
                     newTeilnehmer:'',
                     was: '',
@@ -295,7 +295,7 @@
             {
                 axios.patch('/group/' + this.update_group.title, {
                     title: this.update_group.title,
-                    teilnehmerview: this.update_group.newTeilnehmer
+                    members: this.update_group.newTeilnehmer
                 })
                     .then(response => {
                         this.update_group.newTeilnehmer = '';

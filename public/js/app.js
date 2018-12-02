@@ -43432,8 +43432,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             group: {
                 title: '',
-                teilnehmerview: {},
-                ausgabenview: {},
+                members: {},
+                expenditures: {},
                 wer: '',
                 newTeilnehmer: '',
                 was: '',
@@ -43524,7 +43524,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.patch('/group/' + this.update_group.title, {
                 title: this.update_group.title,
-                teilnehmerview: this.update_group.newTeilnehmer
+                members: this.update_group.newTeilnehmer
             }).then(function (response) {
                 _this6.update_group.newTeilnehmer = '';
                 console.log(response.data);
@@ -43901,7 +43901,7 @@ var render = function() {
                 _c(
                   "ul",
                   [
-                    _vm._l(_vm.show_group.teilnehmerview, function(data) {
+                    _vm._l(_vm.show_group.members, function(data) {
                       return data.mussZahlen >= 0
                         ? _c("li", [
                             _vm._v(
@@ -43915,7 +43915,7 @@ var render = function() {
                         : _vm._e()
                     }),
                     _vm._v(" "),
-                    _vm._l(_vm.show_group.teilnehmerview, function(data) {
+                    _vm._l(_vm.show_group.members, function(data) {
                       return data.mussZahlen < 0
                         ? _c("li", [
                             _vm._v(
@@ -43957,7 +43957,7 @@ var render = function() {
               _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "ul",
-                  _vm._l(_vm.show_group.ausgabenview, function(skill) {
+                  _vm._l(_vm.show_group.expenditures, function(skill) {
                     return _c("li", [
                       _vm._v(
                         "\n                             " +

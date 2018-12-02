@@ -17,8 +17,8 @@ class CreateGroupsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('title');
-            $table->text('teilnehmerview');
-            $table->text('ausgabenview');
+            $table->text('members');
+            $table->text('expenditures');
             $table->timestamps();
         });
     }

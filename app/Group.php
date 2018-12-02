@@ -10,8 +10,8 @@ class Group extends Model
     protected $fillable = [
         'title',
         'user_id',
-        'teilnehmerview',
-        'ausgabenview'
+        'members',
+        'expenditures'
     ];
 
     public function getRouteKeyName()

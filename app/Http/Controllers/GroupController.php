@@ -37,8 +37,8 @@ class GroupController extends Controller
         $group = Group::create([
             'title'             => $request->input('title'),
             'user_id'           => auth()->user()->id,
-            'teilnehmerview'    => json_encode(array()),
-            'ausgabenview'      => json_encode(array())
+            'members'           => json_encode(array()),
+            'expenditures'      => json_encode(array())
         ]);
 
         return response()->json([
@@ -55,8 +55,8 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        $group->teilnehmerview = json_decode($group->teilnehmerview, true);
-        $group->ausgabenview = json_decode($group->ausgabenview, true);
+        $group->members = json_decode($group->members, true);
+        $group->expenditures = json_decode($group->expenditures, true);
 
         return response()->json([
             'group'    => $group,
@@ -71,9 +71,9 @@ class GroupController extends Controller
      */
     public function showTeilnehmer(Group $group)
     {
-        $tv = json_decode($group->teilnehmerview, true);
-        $teilnehmer = json_decode($group->teilnehmerview, true);
-        $zuzahlen = json_decode($group->ausgabenview, true);
+        $tv = json_decode($group->members, true);
+        $teilnehmer = json_decode($group->members, true);
+        $zuzahlen = json_decode($group->expenditures, true);
 
 
         for ($i = 0; $i < 40; $i++)
@@ -128,30 +128,30 @@ class GroupController extends Controller
     {
         $this->validate($request, [
             'title'        => 'required|max:255',
-            'tn_name'      => 'unique:groups,teilnehmerview'
+            'tn_name'      => 'unique:groups,members'
         ]);
 
-        $tv = json_decode($group->teilnehmerview, true);
+        $tv = json_decode($group->members, true);
 
-        if ($request->has('teilnehmerview')) {
+        if ($request->has('members')) {
             $last_item    = end($tv);
             $tn_id = $last_item['id'];
             $appendtv = array(
                 'id' => ++$tn_id,
-                'tn_name' => $request->input('teilnehmerview'),
+                'tn_name' => $request->input('members'),
                 'mussZahlen' => 0
             );
             array_push($tv, $appendtv);
         }
 
 
-        $zv = json_decode($group->ausgabenview, true);
-        if ($request->has('ausgabenview')) {
+        $zv = json_decode($group->expenditures, true);
+        if ($request->has('expenditures')) {
             $last_item    = end($zv);
             $tn_id = $last_item['id'];
             $append = array(
                 'id' => ++$tn_id,
-                'wer' => $request->input('ausgabenview'),
+                'wer' => $request->input('expenditures'),
                 'was' => $request->input('was'),
                 'preis' => $request->input('preis')
             );
@@ -159,7 +159,7 @@ class GroupController extends Controller
 
             foreach ($tv as $key => $entry) {
                 $durchschnitt = ($request->input('preis') / count($tv)) * - 1;
-                if($tv[$key]['tn_name'] == $request->input('ausgabenview'))
+                if($tv[$key]['tn_name'] == $request->input('expenditures'))
                     $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $durchschnitt;
                 else
                     $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $durchschnitt;
@@ -167,8 +167,8 @@ class GroupController extends Controller
         }
 
         $group->title = request('title');
-        $group->teilnehmerview = json_encode($tv);
-        $group->ausgabenview = json_encode($zv);
+        $group->members = json_encode($tv);
+        $group->expenditures = json_encode($zv);
 
         $group->save();
 
@@ -195,7 +195,7 @@ class GroupController extends Controller
 
     public function addTeilnehmer(Group $group)
     {
-        $teilnehmer = json_decode($group->teilnehmerview, true);
+        $teilnehmer = json_decode($group->members, true);
 
         return view('group.addTn', compact('group', 'teilnehmer'));
     }
@@ -207,9 +207,9 @@ class GroupController extends Controller
             'title'        => 'required|max:255',
         ]);
 
-        $tv = json_decode($group->teilnehmerview, true);
+        $tv = json_decode($group->members, true);
 
-        $zv = json_decode($group->ausgabenview, true);
+        $zv = json_decode($group->expenditures, true);
 
         $last_item    = end($tv);
         $tn_id = $last_item['id'];
@@ -223,8 +223,8 @@ class GroupController extends Controller
 
 
         $group->title = request('title');
-        $group->teilnehmerview = json_encode($tv);
-        $group->ausgabenview = json_encode($zv);
+        $group->members = json_encode($tv);
+        $group->expenditures = json_encode($zv);
 
         $group->save();
 
@@ -234,7 +234,7 @@ class GroupController extends Controller
 
     public function addZahlung(Group $group)
     {
-        $teilnehmer = json_decode($group->teilnehmerview, true);
+        $teilnehmer = json_decode($group->members, true);
 
         return view('group.add', compact('group', 'teilnehmer'));
     }
@@ -246,9 +246,9 @@ class GroupController extends Controller
             'title'        => 'required|max:255',
         ]);
 
-        $tv = json_decode($group->teilnehmerview, true);
+        $tv = json_decode($group->members, true);
 
-        $zv = json_decode($group->ausgabenview, true);
+        $zv = json_decode($group->expenditures, true);
 
         $last_item    = end($zv);
         $tn_id = $last_item['id'];
@@ -291,8 +291,8 @@ class GroupController extends Controller
         }
 
         $group->title = request('title');
-        $group->teilnehmerview = json_encode($tv);
-        $group->ausgabenview = json_encode($zv);
+        $group->members = json_encode($tv);
+        $group->expenditures = json_encode($zv);
 
         $group->save();
 
@@ -302,7 +302,7 @@ class GroupController extends Controller
 
     public function berechnen(Group $group)
     {
-        $tv = json_decode($group->teilnehmerview, true);
+        $tv = json_decode($group->members, true);
 
         for ($i = 0; $i < 40; $i++)
         {
@@ -344,7 +344,7 @@ class GroupController extends Controller
 
     public function endAbrechnung(Group $group)
     {
-        $tv = json_decode($group->teilnehmerview, true);
+        $tv = json_decode($group->members, true);
 
         for ($i = 0; $i < 40; $i++)
         {
