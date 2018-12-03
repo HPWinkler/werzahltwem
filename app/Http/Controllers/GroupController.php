@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class GroupController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the groups.
      *
      * @return \Illuminate\Http\Response
      */
@@ -23,7 +23,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created group in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -31,7 +31,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title'        => 'required|max:255|unique:groups',
+            'title'        => 'required|max:25|unique:groups',
         ]);
 
         $group = Group::create([
@@ -48,7 +48,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified group.
      *
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
@@ -64,7 +64,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified group in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Group  $group
@@ -73,7 +73,7 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         $this->validate($request, [
-            'title'        => 'required|max:255',
+            'title'        => 'required|max:25',
             'tn_name'      => 'unique:groups,members'
         ]);
 
@@ -89,7 +89,6 @@ class GroupController extends Controller
             );
             array_push($tv, $appendtv);
         }
-
 
         $zv = json_decode($group->expenditures, true);
         if ($request->has('expenditures')) {
@@ -119,12 +118,12 @@ class GroupController extends Controller
         $group->save();
 
         return response()->json([
-            'message' => 'Task updated successfully!'
+            'message' => 'Das Update war erfolgreich!'
         ], 200);
     }
 
 
-    public function berechnen(Group $group)
+    public function calculateWzw(Group $group)
     {
         $tv = json_decode($group->members, true);
 
@@ -167,7 +166,7 @@ class GroupController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified group from storage.
      *
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
@@ -177,7 +176,7 @@ class GroupController extends Controller
         $group->delete();
 
         return response()->json([
-            'message' => 'Group deleted successfully!'
+            'message' => 'Die Gruppe wurde erfolgreich gelöscht!'
         ], 200);
     }
 

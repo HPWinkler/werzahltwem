@@ -20,7 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/group', 'GroupController');
-Route::get('/group/{group}/berechnen', 'GroupController@berechnen');
+Route::get('/group/{group}/wzw', 'GroupController@calculateWzw');
 
 Route::get('/group/{group}/addmember', 'WzwController@addMember');
 Route::get('/group/{group}/view', 'WzwController@showGroup');

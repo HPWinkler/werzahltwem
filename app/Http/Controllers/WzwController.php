@@ -106,7 +106,7 @@ class WzwController extends Controller
 
         $group->save();
 
-        return redirect()->action('WzwController@showGroup', [$group]);
+        return redirect()->action('WzwController@showGroup', [$group])->with('success', 'Teilnehmer wurde erfolgreich hinzugefügt!');
     }
 
 
@@ -133,6 +133,7 @@ class WzwController extends Controller
     {
         $this->validate($request, [
             'title'        => 'required|max:255',
+            'preis'        => 'numeric'
         ]);
 
         $tv = json_decode($group->members, true);
@@ -183,7 +184,7 @@ class WzwController extends Controller
 
         $group->save();
 
-        return redirect()->action('WzwController@showGroup', [$group]);
+        return redirect()->action('WzwController@showGroup', [$group])->with('success', 'Ausgabe wurde erfolgreich erstellt!');
     }
 
 }

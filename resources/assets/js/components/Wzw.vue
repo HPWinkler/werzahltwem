@@ -255,7 +255,7 @@
                 $("#show_wzw").modal("show");
                 this.swzw = this.groups[index];
 
-                axios.get('/group/' + this.swzw.title + '/berechnen')
+                axios.get('/group/' + this.swzw.title + '/wzw')
                     .then(response => {
                         this.wzw_group = response.data.wzw;
                     });

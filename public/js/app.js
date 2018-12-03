@@ -43489,7 +43489,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $("#show_wzw").modal("show");
             this.swzw = this.groups[index];
 
-            axios.get('/group/' + this.swzw.title + '/berechnen').then(function (response) {
+            axios.get('/group/' + this.swzw.title + '/wzw').then(function (response) {
                 _this4.wzw_group = response.data.wzw;
             });
         },
