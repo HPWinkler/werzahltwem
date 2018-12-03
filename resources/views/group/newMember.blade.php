@@ -9,7 +9,7 @@
                 für die Gruppe {{ $group->title }}
             </p>
             <p>
-                <a class="btn btn-success btn-lg" href="/group/{{ $group->title }}/teilnehmer" role="button">Zurück</a>
+                <a class="btn btn-success btn-lg" href="/group/{{ $group->title }}/view" role="button">Zurück</a>
             </p>
         </div>
     </div>
@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-6">
-                {!! Form::open(['action' => ['WzwController@updateTeilnehmer', $group->title], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                {!! Form::open(['action' => ['WzwController@storeMember', $group->title], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 
                 <div class="form-group">
                     {{Form::label('title', 'Gruppe')}}

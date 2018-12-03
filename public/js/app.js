@@ -43625,8 +43625,7 @@ var render = function() {
                                 "a",
                                 {
                                   attrs: {
-                                    href:
-                                      "/group/" + group.title + "/teilnehmer"
+                                    href: "/group/" + group.title + "/view"
                                   }
                                 },
                                 [_vm._v(_vm._s(group.title))]

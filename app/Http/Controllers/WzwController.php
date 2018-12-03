@@ -7,21 +7,13 @@ use Illuminate\Http\Request;
 
 class WzwController extends Controller
 {
-    public function addTeilnehmer(Group $group)
-    {
-        $allMembers = json_decode($group->members, true);
-
-        return view('group.addTn', compact('group', 'allMembers'));
-    }
-
-
     /**
-     * Display the specified resource.
+     * Display the specified group.
      *
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function showTeilnehmer(Group $group)
+    public function showGroup(Group $group)
     {
         $tv = json_decode($group->members, true);
         $allMembers = json_decode($group->members, true);
@@ -70,7 +62,24 @@ class WzwController extends Controller
     }
 
 
-    public function updateTeilnehmer(Request $request, Group $group)
+    /**
+     * Show the form for creating a new member.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function addMember(Group $group)
+    {
+        return view('group.newMember', compact('group'));
+    }
+
+
+    /**
+     * Store a newly created member in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeMember(Request $request, Group $group)
     {
         $this->validate($request, [
             'title'        => 'required|max:255',
@@ -97,19 +106,30 @@ class WzwController extends Controller
 
         $group->save();
 
-        return redirect()->action('WzwController@showTeilnehmer', [$group]);
+        return redirect()->action('WzwController@showGroup', [$group]);
     }
 
 
-    public function addZahlung(Group $group)
+    /**
+     * Show the form for creating a new expenditure.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function addExpenditure(Group $group)
     {
         $allMembers = json_decode($group->members, true);
 
-        return view('group.add', compact('group', 'allMembers'));
+        return view('group.newExpenditure', compact('group', 'allMembers'));
     }
 
 
-    public function updateZahlung(Request $request, Group $group)
+    /**
+     * Store a newly created expenditure in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeExpenditure(Request $request, Group $group)
     {
         $this->validate($request, [
             'title'        => 'required|max:255',
@@ -163,46 +183,7 @@ class WzwController extends Controller
 
         $group->save();
 
-        return redirect()->action('WzwController@showTeilnehmer', [$group]);
+        return redirect()->action('WzwController@showGroup', [$group]);
     }
 
-
-    public function endAbrechnung(Group $group)
-    {
-        $tv = json_decode($group->members, true);
-
-        for ($i = 0; $i < 40; $i++)
-        {
-            foreach ($tv as $key => $row) {
-                $mussZahlen[$key] = $row['mussZahlen'];
-            }
-
-            $mussZahlen = array_column($tv, 'mussZahlen');
-            array_multisort($mussZahlen, SORT_DESC, $tv);
-
-            $firstElement  = reset($tv);
-            $lastElement = end($tv);
-
-            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
-
-            if ($division > 0)
-            {
-                array_pop($tv);
-                $tv[0]['mussZahlen'] = $division;
-                $amount = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
-            }
-            else
-            {
-                $tv[count($tv)-1]['mussZahlen'] = $division;
-                unset($tv[0]);
-                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
-            }
-
-            if (count($tv) == 1)
-                break;
-        }
-
-        return view('group.berechnen', compact('group', 'wzw'));
-    }
 }

@@ -41,7 +41,7 @@
                         </tbody>
                     </table>
                     <p>
-                        <a href="/group/{{ $group->title }}/addteilnehmer" class="btn btn-success">Neuer Teilnehmer</a>
+                        <a href="/group/{{ $group->title }}/addmember" class="btn btn-success">Neuer Teilnehmer</a>
                     </p>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                         </tbody>
                     </table>
                     <p>
-                        <a href="/group/{{ $group->title }}/addzahlung" class="btn btn-success">Neue Ausgabe</a>
+                        <a href="/group/{{ $group->title }}/addexpenditure" class="btn btn-success">Neue Ausgabe</a>
                     </p>
                 </div>
             </div>

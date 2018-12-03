@@ -34,7 +34,7 @@
                             </tr>
                             <tr v-for="(group, index) in groups">
                                 <td>{{ index + 1 }}</td>
-                                <td><a :href="'/group/' + group.title + '/teilnehmer'">{{ group.title }}</a></td>
+                                <td><a :href="'/group/' + group.title + '/view'">{{ group.title }}</a></td>
                                 <td>
                                     <button @click="initMemberView(index)" class="btn btn-primary btn-xs">Teilnehmerliste</button>
                                     <button @click="initNewMember(index)" class="btn btn-success btn-xs">Neuer Teilnehmer</button>
