@@ -20,13 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/group', 'GroupController');
-Route::get('/group/{group}/teilnehmer', 'GroupController@showTeilnehmer');
-Route::get('/group/{group}/addzahlung', 'GroupController@addZahlung');
-Route::get('/group/{group}/addteilnehmer', 'GroupController@addTeilnehmer');
-Route::put('/group/{group}/updatezahlung', 'GroupController@updateZahlung');
-Route::put('/group/{group}/updateteilnehmer', 'GroupController@updateTeilnehmer');
 Route::get('/group/{group}/berechnen', 'GroupController@berechnen');
-Route::get('/group/{group}/endAbrechnung', 'GroupController@endAbrechnung');
+
+Route::get('/group/{group}/teilnehmer', 'WzwController@showTeilnehmer');
+Route::get('/group/{group}/addzahlung', 'WzwController@addZahlung');
+Route::get('/group/{group}/addteilnehmer', 'WzwController@addTeilnehmer');
+Route::put('/group/{group}/updatezahlung', 'WzwController@updateZahlung');
+Route::put('/group/{group}/updateteilnehmer', 'WzwController@updateTeilnehmer');
+Route::get('/group/{group}/endAbrechnung', 'WzwController@endAbrechnung');
 
 Route::get('/aboutus', function () {
     return view('/footerpages/aboutus');

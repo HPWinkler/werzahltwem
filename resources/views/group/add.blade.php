@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-6">
-                {!! Form::open(['action' => ['GroupController@updateZahlung', $group->title], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                {!! Form::open(['action' => ['WzwController@updateZahlung', $group->title], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 
                 <div class="form-group">
                     {{Form::label('title', 'Gruppe')}}
