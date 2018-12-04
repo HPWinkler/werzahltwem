@@ -7,6 +7,11 @@ use Carbon\Carbon;
 
 class Group extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'title',
         'user_id',
@@ -14,6 +19,11 @@ class Group extends Model
         'expenditures'
     ];
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'title';
@@ -29,9 +39,11 @@ class Group extends Model
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d.M. Y');
     }
 
+    /**
+     * Get the user who created the group.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 }

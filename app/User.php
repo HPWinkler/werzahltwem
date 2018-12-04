@@ -27,6 +27,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Get the groups for the user.
+     */
     public function groups()
     {
         return $this->hasMany(Group::class);

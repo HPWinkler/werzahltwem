@@ -127,8 +127,7 @@ class GroupController extends Controller
     {
         $tv = json_decode($group->members, true);
 
-        for ($i = 0; $i < 40; $i++)
-        {
+        for ($i = 0; $i < 40; $i++) {
             foreach ($tv as $key => $row) {
                 $mussZahlen[$key] = $row['mussZahlen'];
             }
@@ -141,18 +140,15 @@ class GroupController extends Controller
 
             $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
 
-            if ($division > 0)
-            {
+            if ($division > 0) {
                 array_pop($tv);
                 $tv[0]['mussZahlen'] = $division;
                 $amount = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
-            }
-            else
-            {
+                $wzw[] = "{$lastElement['tn_name']} muss $amount € an {$firstElement['tn_name']} zahlen";
+            } else {
                 $tv[count($tv)-1]['mussZahlen'] = $division;
                 unset($tv[0]);
-                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
+                $wzw[] = "{$lastElement['tn_name']} muss {$firstElement['mussZahlen']} € an {$firstElement['tn_name']} zahlen";
             }
 
             if (count($tv) == 1)

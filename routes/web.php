@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('startseite');
+    return view('dashboard');
 });
 
 Auth::routes();
@@ -22,8 +22,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/group', 'GroupController');
 Route::get('/group/{group}/wzw', 'GroupController@calculateWzw');
 
-Route::get('/group/{group}/addmember', 'WzwController@addMember');
 Route::get('/group/{group}/view', 'WzwController@showGroup');
+Route::get('/group/{group}/addmember', 'WzwController@addMember');
 Route::put('/group/{group}/storemember', 'WzwController@storeMember');
 Route::get('/group/{group}/addexpenditure', 'WzwController@addExpenditure');
 Route::put('/group/{group}/storeexpenditure', 'WzwController@storeExpenditure');
@@ -39,7 +39,3 @@ Route::get('/legal', function () {
 Route::get('/privacy-policy', function () {
     return view('/footerpages/privacypolicy');
 });
-
-
-
-

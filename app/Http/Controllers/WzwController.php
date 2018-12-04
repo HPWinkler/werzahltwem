@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 class WzwController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['show']);
+    }
+
+    /**
      * Display the specified group.
      *
      * @param  \App\Group  $group
@@ -20,8 +30,7 @@ class WzwController extends Controller
         $paid = json_decode($group->expenditures, true);
 
 
-        for ($i = 0; $i < 40; $i++)
-        {
+        for ($i = 0; $i < 40; $i++) {
             foreach ($tv as $key => $row) {
                 $mussZahlen[$key] = $row['mussZahlen'];
             }
@@ -34,24 +43,20 @@ class WzwController extends Controller
 
             $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
 
-            if ($division > 0)
-            {
+            if ($division > 0) {
                 array_pop($tv);
                 $tv[0]['mussZahlen'] = $division;
                 $amount = $lastElement['mussZahlen'] * -1;
-                $wzw[] = "{$lastElement['tn_name']} zahlt $amount € an {$firstElement['tn_name']}";
-            }
-            else
-            {
+                $wzw[] = "{$lastElement['tn_name']} muss $amount € an {$firstElement['tn_name']} zahlen";
+            } else {
                 $tv[count($tv)-1]['mussZahlen'] = $division;
                 unset($tv[0]);
-                $wzw[] = "{$lastElement['tn_name']} zahlt {$firstElement['mussZahlen']} € an {$firstElement['tn_name']}";
+                $wzw[] = "{$lastElement['tn_name']} muss {$firstElement['mussZahlen']} € an {$firstElement['tn_name']} zahlen";
             }
 
             if (count($tv) == 1)
                 break;
         }
-
 
         return view('group.show', compact(
             'group',
@@ -60,7 +65,6 @@ class WzwController extends Controller
             'wzw'
         ));
     }
-
 
     /**
      * Show the form for creating a new member.
@@ -71,7 +75,6 @@ class WzwController extends Controller
     {
         return view('group.newMember', compact('group'));
     }
-
 
     /**
      * Store a newly created member in storage.
@@ -98,8 +101,6 @@ class WzwController extends Controller
         );
         array_push($tv, $appendtv);
 
-
-
         $group->title = request('title');
         $group->members = json_encode($tv);
         $group->expenditures = json_encode($zv);
@@ -108,7 +109,6 @@ class WzwController extends Controller
 
         return redirect()->action('WzwController@showGroup', [$group])->with('success', 'Teilnehmer wurde erfolgreich hinzugefügt!');
     }
-
 
     /**
      * Show the form for creating a new expenditure.
@@ -121,7 +121,6 @@ class WzwController extends Controller
 
         return view('group.newExpenditure', compact('group', 'allMembers'));
     }
-
 
     /**
      * Store a newly created expenditure in storage.
@@ -158,19 +157,13 @@ class WzwController extends Controller
             $roundup = round($average, 2);
             $stoploop = 0;
 
-            foreach ($involved as $inv)
-            {
-                if ($inv == $request->input('wer'))
-                {
-                    if($tv[$key]['tn_name'] == $request->input('wer'))
-                    {
+            foreach ($involved as $inv) {
+                if ($inv == $request->input('wer')) {
+                    if($tv[$key]['tn_name'] == $request->input('wer')) {
                         $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $request->input('preis') + $roundup;
                     }
-                }
-                else
-                {
-                    if($tv[$key]['tn_name'] !== $request->input('wer') && $tv[$key]['tn_name'] == $inv && $stoploop < 1)
-                    {
+                } else {
+                    if($tv[$key]['tn_name'] !== $request->input('wer') && $tv[$key]['tn_name'] == $inv && $stoploop < 1) {
                         $tv[$key]['mussZahlen'] = $tv[$key]['mussZahlen'] + $roundup;
                         $stoploop++;
                     }
@@ -186,5 +179,4 @@ class WzwController extends Controller
 
         return redirect()->action('WzwController@showGroup', [$group])->with('success', 'Ausgabe wurde erfolgreich erstellt!');
     }
-
 }

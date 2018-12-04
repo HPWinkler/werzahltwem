@@ -194,8 +194,8 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        <br>
     </div>
-
 </template>
 
 <script>
