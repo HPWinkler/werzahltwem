@@ -23,11 +23,12 @@
             </div>
 
             <div class="panel-body">
+                @if(count($allMembers))
                 <table class="table table-bordered table-striped table-responsive">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Zu zahlen</th>
+                            <th>Zahlt(-) / bekommt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,9 @@
                     @endforeach
                     </tbody>
                 </table>
+                @else
+                    <p>Bisher sind keine Teilnehmer vorhanden.</p>
+                @endif
                 <p>
                     <a href="/group/{{ $group->title }}/addmember" class="btn btn-success">Neuer Teilnehmer</a>
                 </p>
@@ -46,6 +50,7 @@
         </div>
     </div>
 
+    @if(isset($wzw))
     <div class="col-md-6">
         <div class="panel panel-danger">
             <div class="panel-heading">
@@ -61,6 +66,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 
 <div class="row">
@@ -71,7 +77,7 @@
             </div>
 
             <div class="panel-body">
-
+                @if(count($paid))
                 <table class="table table-bordered table-striped table-responsive">
                     <thead>
                         <tr>
@@ -94,6 +100,9 @@
                     @endforeach
                     </tbody>
                 </table>
+                @else
+                    <p>Bisher sind keine Ausgaben vorhanden.</p>
+                @endif
                 <p>
                     <a href="/group/{{ $group->title }}/addexpenditure" class="btn btn-success">Neue Ausgabe</a>
                 </p>

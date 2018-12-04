@@ -32,7 +32,7 @@
 
 
             {{Form::hidden('_method', 'PUT')}}
-            {{Form::submit('Speichern', ['class'=>'btn btn-primary'])}}
+            {{Form::submit('Hinzufügen', ['class'=>'btn btn-primary'])}}
 
             {!! Form::close() !!}
         </div>

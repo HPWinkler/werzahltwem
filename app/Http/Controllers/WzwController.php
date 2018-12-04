@@ -48,6 +48,8 @@ class WzwController extends Controller
                 $tv[0]['mussZahlen'] = $division;
                 $amount = $lastElement['mussZahlen'] * -1;
                 $wzw[] = "{$lastElement['tn_name']} muss $amount € an {$firstElement['tn_name']} zahlen";
+            } elseif ($firstElement['mussZahlen'] == 0) {
+
             } else {
                 $tv[count($tv)-1]['mussZahlen'] = $division;
                 unset($tv[0]);

@@ -12,7 +12,7 @@
 
             <!-- Branding Image -->
             <a class="navbar-brand" style="font-family: 'Kristen ITC'" href="{{ url('/') }}">
-                {{ config('app.name', 'Wzw') }}
+                WerZahltWem
             </a>
         </div>
 
