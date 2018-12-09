@@ -31,7 +31,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title'        => 'required|max:25|unique:groups',
+            'title'        => 'required|alpha_num|max:25|unique:groups',
         ]);
 
         $group = Group::create([
