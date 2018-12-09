@@ -10,7 +10,7 @@
             <span style="font-size: 60%">(erstellt von {{ $group->user->name }})</span>
         </p>
         <p>
-            <a class="btn btn-success btn-lg" href="/home" role="button">Meine Gruppen</a>
+            <a class="btn btn-success btn-lg" href="/mygroups" role="button">Meine Gruppen</a>
         </p>
     </div>
 </div>

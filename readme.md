@@ -1,8 +1,9 @@
 
 ## Wer zahlt wem
 
-Wzw is a Laravel/Vue Project. With it you can calculate who pays whom if you are a group of people
-who do a trip and want to distribute costs.
+Wzw is a Laravel/Vue Project. With it you can calculate who pays whom. For example, you are a group of a few people and you do a trip together.
+One of them pays the flight, one the hotel, one the food, ... . If you don't want to calculate who owes whom how much money, you can enter your expenditures
+and this application will do it for you.
 
 ## Installation
 
