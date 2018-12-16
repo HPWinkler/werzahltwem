@@ -43442,7 +43442,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 newMember: '',
                 wer: '',
                 was: '',
-                preis: ''
+                preis: '',
+                tn_name: '',
+                mussZahlen: ''
             },
             errors: [],
             groups: [],
@@ -43463,7 +43465,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.groups = response.data.groups;
             });
         },
-        initMemberView: function initMemberView(index) {
+        showMembers: function showMembers(index) {
             var _this2 = this;
 
             $("#member_view").modal("show");
@@ -43639,7 +43641,7 @@ var render = function() {
                                   staticClass: "btn btn-primary btn-xs",
                                   on: {
                                     click: function($event) {
-                                      _vm.initMemberView(index)
+                                      _vm.showMembers(index)
                                     }
                                   }
                                 },

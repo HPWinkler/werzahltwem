@@ -138,15 +138,15 @@ class GroupController extends Controller
             $firstElement  = reset($tv);
             $lastElement = end($tv);
 
-            $division = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
+            $difference = $firstElement['mussZahlen'] + $lastElement['mussZahlen'];
 
-            if ($division > 0) {
+            if ($difference > 0) {
                 array_pop($tv);
-                $tv[0]['mussZahlen'] = $division;
+                $tv[0]['mussZahlen'] = $difference;
                 $amount = $lastElement['mussZahlen'] * -1;
                 $wzw[] = "{$lastElement['tn_name']} muss $amount € an {$firstElement['tn_name']} zahlen";
             } else {
-                $tv[count($tv)-1]['mussZahlen'] = $division;
+                $tv[count($tv)-1]['mussZahlen'] = $difference;
                 unset($tv[0]);
                 $wzw[] = "{$lastElement['tn_name']} muss {$firstElement['mussZahlen']} € an {$firstElement['tn_name']} zahlen";
             }

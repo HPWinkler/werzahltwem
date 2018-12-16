@@ -36,7 +36,7 @@
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="'/group/' + group.title + '/view'">{{ group.title }}</a></td>
                                 <td>
-                                    <button @click="initMemberView(index)" class="btn btn-primary btn-xs">Teilnehmerliste</button>
+                                    <button @click="showMembers(index)" class="btn btn-primary btn-xs">Teilnehmerliste</button>
                                     <button @click="initNewMember(index)" class="btn btn-success btn-xs">Neuer Teilnehmer</button>
                                     <button @click="showExpenditures(index)" class="btn btn-info btn-xs">Ausgabenliste</button>
                                     <button @click="showWzw(index)" class="btn btn-warning btn-xs">Endabrechnung</button>
@@ -209,7 +209,9 @@
                     newMember:'',
                     wer: '',
                     was: '',
-                    preis: ''
+                    preis: '',
+                    tn_name: '',
+                    mussZahlen: ''
                 },
                 errors: [],
                 groups: [],
@@ -230,7 +232,7 @@
                         this.groups = response.data.groups;
                     });
             },
-            initMemberView(index)
+            showMembers(index)
             {
                 $("#member_view").modal("show");
                 this.mv = this.groups[index];
